@@ -5,6 +5,7 @@ import MainComponent from "./MainComponent";
 
 const Kanban = () => {
   const { user, isLoaded } = useUser();
+  const [userId, setUserId] = useState(0);
 
   useEffect(() => {
     if (isLoaded && user) {
@@ -20,7 +21,8 @@ const Kanban = () => {
         googleId: user?.externalId,
         imageUrl: user?.imageUrl,
       });
-      console.log(res.data);
+
+      setUserId(res.data.id);
     } catch (e) {
       console.log("error while fetching user from clerk");
     }
@@ -41,7 +43,7 @@ const Kanban = () => {
       </div>
       <div className="mt-10">
         <div className="grid grid-cols-3 gap-6">
-          <MainComponent />
+          <MainComponent userId={userId} />
         </div>
       </div>
     </div>

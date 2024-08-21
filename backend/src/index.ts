@@ -26,6 +26,14 @@ app.use(
 app.post("/signup", async (req, res) => {
   try {
     const { name, imageUrl, email, googleId } = req.body;
+    const existingUser = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+    if (existingUser) {
+      return res.status(200).json(existingUser);
+    }
     const user = await prisma.user.create({
       data: {
         name,
@@ -38,6 +46,24 @@ app.post("/signup", async (req, res) => {
   } catch (e) {
     console.error("errow while adding user to the  database", e);
     res.status(400).json({ message: "failed to add user to  database" });
+  }
+});
+
+app.post("/addtask", async (req, res) => {
+  try {
+    const { title, description, userId, container } = req.body;
+    const task = await prisma.tasks.create({
+      data: {
+        title,
+        description,
+        userId,
+        status: container,
+      },
+    });
+    return res.status(200).json(task);
+  } catch (e) {
+    console.error("errow while addding task");
+    res.status(400).json({ message: "failed  to add task " });
   }
 });
 

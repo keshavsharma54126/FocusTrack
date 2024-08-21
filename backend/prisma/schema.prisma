@@ -29,15 +29,11 @@ model Tasks{
   id            Int           @id @default(autoincrement())
   title         String             
   description   String? 
-  status        TaskStatus    @default(TO_DO)
+  status        String?
   userId        Int   
   user          User          @relation(fields: [userId],references: [id] )
+  dueDate       DateTime
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 }
 
-enum TaskStatus{
-  TO_DO
-  IN_PROGRESS
-  COMPLETED 
-}
