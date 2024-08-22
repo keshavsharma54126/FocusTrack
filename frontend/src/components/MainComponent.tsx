@@ -22,6 +22,8 @@ import { Button } from "./ui/button";
 import { EditTask } from "./EditTask";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
+import { Card } from "./ui/card";
+import Reminder from "./Reminder";
 
 interface Task {
   id: string;
@@ -148,6 +150,9 @@ export default function MainComponent({ userId }: MainComponentProps) {
   return (
     <div className="flex flex-col justify-center w-full ">
       <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 ">
+        <div className="">
+          <Reminder tasks={tasks} />
+        </div>
         <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4 my-8 ">
           <Label htmlFor="search-input" className="sr-only">
             Search Task
@@ -196,7 +201,11 @@ export default function MainComponent({ userId }: MainComponentProps) {
                     <h2 className="text-xl font-semibold text-gray-800">
                       {container}
                     </h2>
-                    <AddTask container={container} userId={userId} />
+
+                    <div className="flex flex-row gap-1">
+                      <p className="text-black mt-2 font-bold">Add Task</p>
+                      <AddTask container={container} userId={userId} />
+                    </div>
                   </div>
                   <Droppable
                     id={container}
