@@ -22,7 +22,7 @@ import { Button } from "./ui/button";
 import { EditTask } from "./EditTask";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
-import { Card } from "./ui/card";
+
 import Reminder from "./Reminder";
 
 interface Task {
@@ -43,6 +43,7 @@ export default function MainComponent({ userId }: MainComponentProps) {
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  // const [search, setSearch] = useState("");
 
   // Fetch tasks only once when the component mounts
   useEffect(() => {
