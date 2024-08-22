@@ -131,6 +131,33 @@ app.put("/editTask", (req, res) => __awaiter(void 0, void 0, void 0, function* (
             .json({ message: "Error while editing task on backend" });
     }
 }));
+app.post("/changeStatus", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { container, taskId } = req.body;
+        const existingTask = yield db_1.prisma.tasks.findUnique({
+            where: {
+                id: parseInt(taskId),
+            },
+        });
+        if (existingTask) {
+            const updatedTask = yield db_1.prisma.tasks.update({
+                where: {
+                    id: parseInt(taskId),
+                },
+                data: {
+                    status: container,
+                },
+            });
+            return res.status(200).json(updatedTask);
+        }
+        return res.status(400).json({ messae: "no task with the given id found" });
+    }
+    catch (e) {
+        return res
+            .status(400)
+            .json({ message: "Error while changing status of task" });
+    }
+}));
 app.listen(3000, () => {
     "listening to port 3000";
 });

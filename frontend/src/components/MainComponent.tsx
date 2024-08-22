@@ -78,12 +78,24 @@ export default function MainComponent({ userId }: MainComponentProps) {
       });
     }
   };
+  async function changeStatus(container: string | undefined, taskId: any) {
+    try {
+      const res = await axios.post("http://localhost:3000/changeStatus", {
+        container,
+        taskId,
+      });
+    } catch (e) {
+      console.error("could not change status", e);
+    }
+  }
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over) return;
 
     const activeContainer = tasks.find((task) => task.id === active.id)?.status;
+    console.log(activeContainer, active.id);
+    changeStatus(activeContainer, active.id);
     const overContainer = over.data?.current?.sortable?.containerId || over.id;
 
     if (activeContainer !== overContainer) {
