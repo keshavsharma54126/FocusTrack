@@ -71,9 +71,14 @@ app.post("/addtask", (req, res) => __awaiter(void 0, void 0, void 0, function* (
         return res.status(400).json({ message: "failed  to add task " });
     }
 }));
-app.get("/gettasks", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.get("/gettasks/:userId", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const tasks = yield db_1.prisma.tasks.findMany();
+        const userId = parseInt(req.params.userId);
+        const tasks = yield db_1.prisma.tasks.findMany({
+            where: {
+                userId,
+            },
+        });
         res.status(200).json(tasks);
     }
     catch (e) {

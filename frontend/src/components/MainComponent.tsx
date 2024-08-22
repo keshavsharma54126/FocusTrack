@@ -38,17 +38,25 @@ export default function MainComponent({ userId }: MainComponentProps) {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
+  // Fetch tasks only once when the component mounts
   useEffect(() => {
     getTasks();
-  }, []);
-
+  }, [userId]);
   async function getTasks() {
+    setIsLoading(true);
     try {
-      const res = await axios.get<Task[]>("http://localhost:3000/gettasks");
+      console.log("fetching tasks");
+      const res = await axios.get<Task[]>(
+        `http://localhost:3000/gettasks/${userId}`
+      );
+      console.log("tasks fetched");
       setTasks(res.data);
     } catch (e) {
-      console.log("could not retrieve tasks", e);
+      console.error("Could not retrieve tasks", e);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -78,61 +86,57 @@ export default function MainComponent({ userId }: MainComponentProps) {
       });
     }
   };
+
   async function changeStatus(container: string | undefined, taskId: any) {
     try {
-      const res = await axios.post("http://localhost:3000/changeStatus", {
+      const response = await axios.post("http://localhost:3000/changeStatus", {
         container,
         taskId,
       });
+      console.log(response.data);
+      return response.data; // Assuming the server returns the updated task
     } catch (e) {
-      console.error("could not change status", e);
+      console.error("Could not change status", e);
+      throw e;
     }
   }
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over) return;
 
     const activeContainer = tasks.find((task) => task.id === active.id)?.status;
-    console.log(activeContainer, active.id);
-    changeStatus(activeContainer, active.id);
     const overContainer = over.data?.current?.sortable?.containerId || over.id;
 
-    if (activeContainer !== overContainer) {
-      setTasks((tasks) => {
-        const activeIndex = tasks.findIndex((t) => t.id === active.id);
-        const overIndex = tasks.findIndex((t) => t.id === over.id);
-
-        return arrayMove(tasks, activeIndex, overIndex).map((task) =>
-          task.id === active.id
-            ? { ...task, status: overContainer as string }
-            : task
+    if (activeContainer === overContainer) {
+      try {
+        const updatedTask = await changeStatus(overContainer, active.id);
+        setTasks((prevTasks) =>
+          prevTasks.map((task) => (task.id === active.id ? updatedTask : task))
         );
-      });
-    } else {
-      const oldIndex = tasks.findIndex((t) => t.id === active.id);
-      const newIndex = tasks.findIndex((t) => t.id === over.id);
-
-      if (oldIndex !== newIndex) {
-        setTasks((tasks) => arrayMove(tasks, oldIndex, newIndex));
+      } catch (e) {
+        console.error("Could not change status", e);
       }
     }
 
     setActiveId(null);
     setActiveTask(null);
   };
+
   const handleDelete = async (event: React.MouseEvent, taskId: string) => {
     event.preventDefault();
     event.stopPropagation();
     try {
-      console.log("delete clicked");
       await axios.delete(`http://localhost:3000/deletetask/${taskId}`);
-
-      window.location.reload();
+      setTasks((tasks) => tasks.filter((task) => task.id !== taskId));
     } catch (e) {
-      console.log("unable to delte the task");
+      console.error("Unable to delete the task", e);
     }
   };
+
+  if (isLoading) {
+    return <div>Loading....</div>;
+  }
 
   return (
     <DndContext
@@ -140,14 +144,14 @@ export default function MainComponent({ userId }: MainComponentProps) {
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
       collisionDetection={closestCorners}>
-      <div className="flex items-center mt-8 space-y-6 ">
+      <div className="flex items-center mt-8 space-y-6">
         <div className="flex flex-col lg:flex-row gap-6">
           {containers.map((container) => (
             <div
               key={container}
               className="flex justify-center items-top sm:w-screen lg:w-full overflow-hidden relative">
-              <div className="w-full sm:w-80 md:w-96 p-4 border-2 border-dashed border-gray-300 bg-gray-100 rounded-lg shadow-md transition-colors duration-300 hover:bg-gray-20 ">
-                <div className="flex items-center justify-between mb-4 ">
+              <div className="w-full sm:w-80 md:w-96 p-4 border-2 border-dashed border-gray-300 bg-gray-100 rounded-lg shadow-md transition-colors duration-300 hover:bg-gray-200">
+                <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-semibold text-gray-800">
                     {container}
                   </h2>
@@ -155,7 +159,7 @@ export default function MainComponent({ userId }: MainComponentProps) {
                 </div>
                 <Droppable
                   id={container}
-                  className="flex flex-col gap-2 min-h-[200px]  p-2 overflow-hidden max-h-full">
+                  className="flex flex-col gap-2 min-h-[200px] p-2 overflow-hidden max-h-full">
                   <SortableContext
                     items={tasks
                       .filter((t) => t.status === container)
@@ -164,8 +168,10 @@ export default function MainComponent({ userId }: MainComponentProps) {
                     {tasks
                       .filter((t) => t.status === container)
                       .map((t) => (
-                        <div className="bg-gray-300 p-4 shadow-xl border-black rounded-xl w-full">
-                          <Draggable key={t.id} id={t.id} className="w-full">
+                        <div
+                          key={t.id}
+                          className="bg-gray-300 p-4 shadow-xl border-black rounded-xl w-full">
+                          <Draggable id={t.id} className="w-full">
                             <TaskCard
                               title={t.title}
                               description={t.description}
@@ -176,21 +182,18 @@ export default function MainComponent({ userId }: MainComponentProps) {
                           </Draggable>
                           <div className="flex mt-2 gap-3">
                             <Button
-                              className="bg-white "
-                              onClick={(e) => {
-                                console.log("button clicked");
-                                handleDelete(e, t.id);
-                              }}>
+                              className="bg-white"
+                              onClick={(e) => handleDelete(e, t.id)}>
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
-                                stroke-width="1.5"
+                                strokeWidth="1.5"
                                 stroke="currentColor"
-                                className="size-6 text-red-500 hover:text-red-700 hover:ml-1 hover:mb-1">
+                                className="w-6 h-6 text-red-500 hover:text-red-700">
                                 <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
                                   d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
                                 />
                               </svg>
@@ -209,21 +212,20 @@ export default function MainComponent({ userId }: MainComponentProps) {
               </div>
             </div>
           ))}
-          <DragOverlay className="fixed z-9999 transform">
-            {activeTask ? (
-              <div>
-                <TaskCard
-                  title={activeTask.title}
-                  description={activeTask.description}
-                  dueDate={activeTask.dueDate}
-                  taskId="1"
-                  container="To do"
-                />
-              </div>
-            ) : null}
-          </DragOverlay>
         </div>
       </div>
+      {/* DragOverlay is not needed */}
+      <DragOverlay>
+        {activeTask ? (
+          <TaskCard
+            title={activeTask.title}
+            description={activeTask.description}
+            dueDate={activeTask.dueDate}
+            taskId={activeTask.id}
+            container={activeTask.status}
+          />
+        ) : null}
+      </DragOverlay>
     </DndContext>
   );
 }

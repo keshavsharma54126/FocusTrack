@@ -68,9 +68,14 @@ app.post("/addtask", async (req, res) => {
   }
 });
 
-app.get("/gettasks", async (req, res) => {
+app.get("/gettasks/:userId", async (req, res) => {
   try {
-    const tasks = await prisma.tasks.findMany();
+    const userId = parseInt(req.params.userId);
+    const tasks = await prisma.tasks.findMany({
+      where: {
+        userId,
+      },
+    });
     res.status(200).json(tasks);
   } catch (e) {
     console.error("error while getting tasks");
