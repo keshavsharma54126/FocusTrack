@@ -149,8 +149,8 @@ export default function MainComponent({ userId }: MainComponentProps) {
       onDragOver={handleDragOver}
       onDragEnd={handleDragEnd}
       collisionDetection={closestCorners}>
-      <div className="flex items-center mt-8 space-y-6">
-        <div className="flex flex-col lg:flex-row gap-6">
+      <div className="flex items-center mt-8 space-y-6 max-w-screen">
+        <div className="flex flex-col lg:flex-row gap-6 w-screen">
           {containers.map((container) => (
             <div
               key={container}
