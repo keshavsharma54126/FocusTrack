@@ -47,7 +47,7 @@ export default function MainComponent({ userId }: MainComponentProps) {
   async function getTasks() {
     setIsLoading(true);
     try {
-      console.log("fetching tasks");
+      console.log("fetching tasks", activeId);
       const res = await axios.get<Task[]>(
         `https://kanban-board-nu-olive.vercel.app/gettasks/${userId}`
       );

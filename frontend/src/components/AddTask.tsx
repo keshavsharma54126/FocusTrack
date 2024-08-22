@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "./ui/textarea";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { DatePicker } from "./ui/datepicker";
 import React from "react";

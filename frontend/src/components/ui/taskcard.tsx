@@ -13,7 +13,6 @@ const TaskCard: React.FC<CardProps> = ({
   title,
   description,
   dueDate,
-  taskId,
   container,
 }: {
   title: string;
