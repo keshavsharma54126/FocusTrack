@@ -163,5 +163,5 @@ app.post("/changeStatus", async (req, res) => {
 });
 
 app.listen(3000, () => {
-  "listening to port 3000";
+  console.log("listening to port 3000");
 });

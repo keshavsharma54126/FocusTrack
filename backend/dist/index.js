@@ -164,5 +164,5 @@ app.post("/changeStatus", (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 }));
 app.listen(3000, () => {
-    "listening to port 3000";
+    console.log("listening to port 3000");
 });
