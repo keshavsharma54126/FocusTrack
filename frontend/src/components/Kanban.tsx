@@ -15,12 +15,15 @@ const Kanban = () => {
 
   const synchronizeUser = async () => {
     try {
-      const res = await axios.post("http://localhost:3000/signup", {
-        email: user?.emailAddresses[0].emailAddress,
-        name: user?.fullName,
-        googleId: user?.externalId,
-        imageUrl: user?.imageUrl,
-      });
+      const res = await axios.post(
+        `https://kanban-board-nu-olive.vercel.app/signup`,
+        {
+          email: user?.emailAddresses[0].emailAddress,
+          name: user?.fullName,
+          googleId: user?.externalId,
+          imageUrl: user?.imageUrl,
+        }
+      );
 
       setUserId(res.data.id);
     } catch (e) {

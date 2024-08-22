@@ -49,7 +49,7 @@ export default function MainComponent({ userId }: MainComponentProps) {
     try {
       console.log("fetching tasks");
       const res = await axios.get<Task[]>(
-        `http://localhost:3000/gettasks/${userId}`
+        `https://kanban-board-nu-olive.vercel.app/gettasks/${userId}`
       );
       console.log("tasks fetched");
       setTasks(res.data);
@@ -89,10 +89,13 @@ export default function MainComponent({ userId }: MainComponentProps) {
 
   async function changeStatus(container: string | undefined, taskId: any) {
     try {
-      const response = await axios.post("http://localhost:3000/changeStatus", {
-        container,
-        taskId,
-      });
+      const response = await axios.post(
+        "https://kanban-board-nu-olive.vercel.app/changeStatus",
+        {
+          container,
+          taskId,
+        }
+      );
       console.log(response.data);
       return response.data; // Assuming the server returns the updated task
     } catch (e) {
@@ -127,7 +130,9 @@ export default function MainComponent({ userId }: MainComponentProps) {
     event.preventDefault();
     event.stopPropagation();
     try {
-      await axios.delete(`http://localhost:3000/deletetask/${taskId}`);
+      await axios.delete(
+        `https://kanban-board-nu-olive.vercel.app/deletetask/${taskId}`
+      );
       setTasks((tasks) => tasks.filter((task) => task.id !== taskId));
     } catch (e) {
       console.error("Unable to delete the task", e);
