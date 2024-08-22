@@ -11,7 +11,7 @@ export default function App() {
     <div className="min-h-screen bg-gray-900 text-white flex flex-col relative ">
       <nav className="bg-gray-800 py-4 px-6 flex justify-between items-center shadow-lg fixed z-30 w-screen">
         <div className="text-white font-bold text-2xl tracking-wide">
-          Kanban Board
+          Task Manager
         </div>
         <div>
           <SignedOut>
@@ -42,7 +42,7 @@ export default function App() {
         <div className="absolute inset-0 bg-black opacity-50"></div>
         <div className="relative z-10 p-6 text-center">
           <h1 className="text-3xl md:text-5xl lg:text-4xl font-extrabold mb-4">
-            Welcome to Your Kanban Board
+            Welcome to Your Task Manager
           </h1>
           <p className="text-lg md:text-xl mb-8 max-w-lg mx-auto">
             Manage your tasks and projects efficiently with our intuitive and
