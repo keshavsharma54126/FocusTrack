@@ -56,9 +56,9 @@ export default function App() {
         </div>
       </div>
 
-      <div id="kanban" className="p-10 flex-1">
+      <div id="kanban" className=" flex-1">
         <SignedIn>
-          <div className="h-full">
+          <div className="h-full jus">
             <Kanban />
           </div>
         </SignedIn>
