@@ -13,7 +13,9 @@ export default function App() {
         <div className="text-white font-bold text-xl">Kanban Board</div>
         <div>
           <SignedOut>
-            <SignInButton className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" />
+            <div className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
+              <SignInButton />
+            </div>
           </SignedOut>
           <SignedIn>
             <UserButton
