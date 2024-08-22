@@ -158,6 +158,25 @@ app.post("/changeStatus", async (req, res) => {
   }
 });
 
+app.get("/search/:searchKey", async (req, res) => {
+  try {
+    const searchkey = req.params.searchKey;
+    const tasks = await prisma.tasks.findMany({
+      where: {
+        title: {
+          contains: searchkey,
+          mode: "insensitive",
+        },
+      },
+    });
+    res.status(200).json(tasks);
+  } catch (e) {
+    return res
+      .status(400)
+      .json({ message: "error  while searching for tasks" });
+  }
+});
+
 app.listen(3000, () => {
   console.log("listening to port 3000");
 });

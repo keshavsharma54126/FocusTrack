@@ -160,6 +160,25 @@ app.post("/changeStatus", (req, res) => __awaiter(void 0, void 0, void 0, functi
             .json({ message: "Error while changing status of task" });
     }
 }));
+app.get("/search/:searchKey", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const searchkey = req.params.searchKey;
+        const tasks = yield db_1.prisma.tasks.findMany({
+            where: {
+                title: {
+                    contains: searchkey,
+                    mode: "insensitive",
+                },
+            },
+        });
+        res.status(200).json(tasks);
+    }
+    catch (e) {
+        return res
+            .status(400)
+            .json({ message: "error  while searching for tasks" });
+    }
+}));
 app.listen(3000, () => {
     console.log("listening to port 3000");
 });

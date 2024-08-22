@@ -43,7 +43,7 @@ export default function MainComponent({ userId }: MainComponentProps) {
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  // const [search, setSearch] = useState("");
+  const [search, setSearch] = useState("");
 
   // Fetch tasks only once when the component mounts
   useEffect(() => {
@@ -102,7 +102,7 @@ export default function MainComponent({ userId }: MainComponentProps) {
         }
       );
       console.log(response.data);
-      return response.data; // Assuming the server returns the updated task
+      return response.data;
     } catch (e) {
       console.error("Could not change status", e);
       throw e;
@@ -143,6 +143,16 @@ export default function MainComponent({ userId }: MainComponentProps) {
       console.error("Unable to delete the task", e);
     }
   };
+  const handleSearch = async () => {
+    try {
+      const res = await axios.get(
+        `https://kanban-board-nu-olive.vercel.app/search/${search}`
+      );
+      setTasks(res.data);
+    } catch (e) {
+      console.error("error while seraching for tasks", e);
+    }
+  };
 
   if (isLoading) {
     return <div>Loading....</div>;
@@ -162,6 +172,11 @@ export default function MainComponent({ userId }: MainComponentProps) {
             <Input
               id="search-input"
               type="text"
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                handleSearch();
+              }}
               placeholder="Search for a task"
               className=" pl-10 pr-4 py-2 text-sm sm:text-base text-gray-900 border border-gray-300 rounded-full bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
             />
