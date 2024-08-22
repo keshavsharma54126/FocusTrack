@@ -42,7 +42,7 @@ const Kanban = () => {
         <h1 className="text-gray-800 text-3xl font-bold">Tasks</h1>
       </div>
       <div className="mt-10">
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-3 gap-6 overflow-hidden">
           <MainComponent userId={userId} />
         </div>
       </div>

@@ -67,6 +67,16 @@ app.post("/addtask", async (req, res) => {
   }
 });
 
+app.get("/gettasks", async (req, res) => {
+  try {
+    const tasks = await prisma.tasks.findMany();
+    res.status(200).json(tasks);
+  } catch (e) {
+    console.error("error while getting tasks");
+    res.status(400).json({ message: "failed to get all  the  tasks" });
+  }
+});
+
 app.listen(3000, () => {
   "listening to port 3000";
 });

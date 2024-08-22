@@ -70,6 +70,16 @@ app.post("/addtask", (req, res) => __awaiter(void 0, void 0, void 0, function* (
         res.status(400).json({ message: "failed  to add task " });
     }
 }));
+app.get("/gettasks", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const tasks = yield db_1.prisma.tasks.findMany();
+        res.status(200).json(tasks);
+    }
+    catch (e) {
+        console.error("error while getting tasks");
+        res.status(400).json({ message: "failed to get all  the  tasks" });
+    }
+}));
 app.listen(3000, () => {
     "listening to port 3000";
 });
