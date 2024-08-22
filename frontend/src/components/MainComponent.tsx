@@ -43,7 +43,7 @@ export default function MainComponent({ userId }: MainComponentProps) {
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [search, setSearch] = useState("");
+  const [searchkey, setSearch] = useState("");
 
   // Fetch tasks only once when the component mounts
   useEffect(() => {
@@ -145,8 +145,9 @@ export default function MainComponent({ userId }: MainComponentProps) {
   };
   const handleSearch = async () => {
     try {
-      const res = await axios.get(
-        `https://kanban-board-nu-olive.vercel.app/search/${search}`
+      const res = await axios.post(
+        `https://kanban-board-nu-olive.vercel.app/search/${searchkey}`,
+        { userId }
       );
       setTasks(res.data);
     } catch (e) {
@@ -172,7 +173,7 @@ export default function MainComponent({ userId }: MainComponentProps) {
             <Input
               id="search-input"
               type="text"
-              value={search}
+              value={searchkey}
               onChange={(e) => {
                 setSearch(e.target.value);
                 handleSearch();

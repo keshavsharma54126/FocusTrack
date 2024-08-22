@@ -158,15 +158,17 @@ app.post("/changeStatus", async (req, res) => {
   }
 });
 
-app.get("/search/:searchKey", async (req, res) => {
+app.post("/search/:searchKey", async (req, res) => {
   try {
     const searchkey = req.params.searchKey;
+    const { userId } = req.body;
     const tasks = await prisma.tasks.findMany({
       where: {
         title: {
           contains: searchkey,
           mode: "insensitive",
         },
+        userId,
       },
     });
     res.status(200).json(tasks);

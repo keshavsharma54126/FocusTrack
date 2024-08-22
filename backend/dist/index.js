@@ -160,15 +160,17 @@ app.post("/changeStatus", (req, res) => __awaiter(void 0, void 0, void 0, functi
             .json({ message: "Error while changing status of task" });
     }
 }));
-app.get("/search/:searchKey", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/search/:searchKey", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const searchkey = req.params.searchKey;
+        const { userId } = req.body;
         const tasks = yield db_1.prisma.tasks.findMany({
             where: {
                 title: {
                     contains: searchkey,
                     mode: "insensitive",
                 },
+                userId,
             },
         });
         res.status(200).json(tasks);
