@@ -17,10 +17,7 @@ const db_1 = require("./db");
 const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
-const corsOptions = {
-    origin: process.env.FRONTEND_URL,
-};
-app.use((0, cors_1.default)(corsOptions));
+app.use((0, cors_1.default)());
 app.use(body_parser_1.default.json());
 app.use(express_1.default.json());
 app.use((err, req, res, next) => {
