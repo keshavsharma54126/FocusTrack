@@ -145,13 +145,23 @@ export default function MainComponent({ userId }: MainComponentProps) {
   };
   const handleSearch = async () => {
     try {
-      const res = await axios.post(
-        `https://kanban-board-nu-olive.vercel.app/search/${searchkey}`,
-        { userId }
-      );
+      let res;
+      if (searchkey.trim() === "") {
+        res = await axios.get(
+          `https://kanban-board-nu-olive.vercel.app/tasks`,
+          {
+            params: { userId },
+          }
+        );
+      } else {
+        res = await axios.get(
+          `https://kanban-board-nu-olive.vercel.app/search/${searchkey}`,
+          { params: { userId } }
+        );
+      }
       setTasks(res.data);
     } catch (e) {
-      console.error("error while seraching for tasks", e);
+      console.error("Error while searching for tasks", e);
     }
   };
 
