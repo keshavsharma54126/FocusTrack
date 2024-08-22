@@ -45,25 +45,26 @@ app.post("/signup", async (req, res) => {
     return res.status(200).json(user);
   } catch (e) {
     console.error("errow while adding user to the  database", e);
-    res.status(400).json({ message: "failed to add user to  database" });
+    return res.status(400).json({ message: "failed to add user to  database" });
   }
 });
 
 app.post("/addtask", async (req, res) => {
   try {
-    const { title, description, userId, container } = req.body;
+    const { title, description, userId, container, date } = req.body;
     const task = await prisma.tasks.create({
       data: {
         title,
         description,
         userId,
         status: container,
+        dueDate: date,
       },
     });
     return res.status(200).json(task);
   } catch (e) {
     console.error("errow while addding task");
-    res.status(400).json({ message: "failed  to add task " });
+    return res.status(400).json({ message: "failed  to add task " });
   }
 });
 
@@ -73,7 +74,59 @@ app.get("/gettasks", async (req, res) => {
     res.status(200).json(tasks);
   } catch (e) {
     console.error("error while getting tasks");
-    res.status(400).json({ message: "failed to get all  the  tasks" });
+    return res.status(400).json({ message: "failed to get all  the  tasks" });
+  }
+});
+
+app.delete("/deletetask/:taskId", async (req, res) => {
+  try {
+    const taskId = parseInt(req.params.taskId);
+    console.log("deleted");
+    const task = await prisma.tasks.delete({
+      where: {
+        id: taskId,
+      },
+    });
+    return res.status(200).json(task);
+  } catch (e) {
+    return res
+      .status(400)
+      .json({ message: "error while deleting task on backend" });
+  }
+});
+
+app.put("/editTask", async (req, res) => {
+  const { title, description, date, taskId } = req.body;
+  try {
+    const taskIdParsed = parseInt(taskId, 10);
+
+    const existingTask = await prisma.tasks.findUnique({
+      where: {
+        id: taskIdParsed,
+      },
+    });
+
+    if (existingTask) {
+      const updatedTask = await prisma.tasks.update({
+        where: {
+          id: taskIdParsed,
+        },
+        data: {
+          title,
+          description,
+          dueDate: new Date(date),
+        },
+      });
+
+      return res.status(200).json(updatedTask);
+    } else {
+      return res.status(404).json({ message: "Task not found" });
+    }
+  } catch (e) {
+    console.error(e);
+    return res
+      .status(500)
+      .json({ message: "Error while editing task on backend" });
   }
 });
 

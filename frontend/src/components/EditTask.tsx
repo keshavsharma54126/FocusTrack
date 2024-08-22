@@ -11,33 +11,37 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "./ui/textarea";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { DatePicker } from "./ui/datepicker";
 import React from "react";
 
-export function AddTask({
+export function EditTask({
   container,
-  userId,
+  title,
+  description,
+  taskId,
 }: {
   container: string;
-  userId: any;
+  title: string;
+  description: string;
+  taskId: any;
 }) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [newtitle, setNewTitle] = useState(title);
+  const [newdescription, setNewDescription] = useState(description);
   const [date, setDate] = React.useState<Date>();
 
-  const handleSubmit = async (container: string) => {
+  const handleEdit = async (container: string) => {
     try {
       if (title === "" || description == "") {
         window.alert("title  and description can not be empty");
         return;
       }
-      const res = await axios.post(`http://localhost:3000/addtask`, {
-        title,
-        description,
+      const res = await axios.put(`http://localhost:3000/editTask`, {
+        title: newtitle,
+        description: newdescription,
         container,
-        userId,
+        taskId,
         date,
       });
       console.log(res.data);
@@ -51,7 +55,7 @@ export function AddTask({
       <DialogTrigger asChild>
         <Button
           variant="ghost"
-          className="bg-green-500 hover:bg-green-300"
+          className="bg-white hover:bg-slate-400"
           size="icon">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -59,21 +63,21 @@ export function AddTask({
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            className="size-6">
+            className="size-6 text-blue-700 hover:mt-1 hover:ml-1">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
             />
           </svg>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add Task to {container}</DialogTitle>
+          <DialogTitle>Edit Task and add to {container}</DialogTitle>
           <DialogDescription>
-            This task will be added to your {container} box, you can manage it
-            by dragging across containers
+            Provide the new title ,description and date for your task and the
+            eddited task will be replaced with the current task
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -83,11 +87,11 @@ export function AddTask({
             </Label>
             <Input
               id="title"
-              value={title}
+              value={newtitle}
               placeholder="Todo Title"
               className="col-span-3"
               onChange={(e) => {
-                setTitle(e.target.value);
+                setNewTitle(e.target.value);
               }}
             />
           </div>
@@ -97,11 +101,11 @@ export function AddTask({
             </Label>
             <Textarea
               id="username"
-              value={description}
+              value={newdescription}
               placeholder="Todo Description"
               className="col-span-3 w-full  px-4 py-2 "
               onChange={(e) => {
-                setDescription(e.target.value);
+                setNewDescription(e.target.value);
               }}
             />
           </div>
@@ -113,9 +117,9 @@ export function AddTask({
         <DialogFooter>
           <Button
             onClick={() => {
-              handleSubmit(container);
+              handleEdit(container);
             }}>
-            Add Task
+            Edit Task
           </Button>
         </DialogFooter>
       </DialogContent>

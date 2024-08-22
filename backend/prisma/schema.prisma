@@ -32,7 +32,7 @@ model Tasks{
   status        String?
   userId        Int   
   user          User          @relation(fields: [userId],references: [id] )
-  dueDate       DateTime
+  dueDate       DateTime?            @db.Date
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 }

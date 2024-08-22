@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   DndContext,
   closestCorners,
@@ -17,12 +17,16 @@ import Droppable from "./Droppable";
 import Draggable from "./Draggable";
 import { AddTask } from "./AddTask";
 import axios from "axios";
+import TaskCard from "./ui/taskcard";
+import { Button } from "./ui/button";
+import { EditTask } from "./EditTask";
 
 interface Task {
   id: string;
   title: string;
   description: string;
   status: string;
+  dueDate: Date;
 }
 
 interface MainComponentProps {
@@ -105,6 +109,18 @@ export default function MainComponent({ userId }: MainComponentProps) {
     setActiveId(null);
     setActiveTask(null);
   };
+  const handleDelete = async (event: React.MouseEvent, taskId: string) => {
+    event.preventDefault();
+    event.stopPropagation();
+    try {
+      console.log("delete clicked");
+      await axios.delete(`http://localhost:3000/deletetask/${taskId}`);
+
+      window.location.reload();
+    } catch (e) {
+      console.log("unable to delte the task");
+    }
+  };
 
   return (
     <DndContext
@@ -117,8 +133,8 @@ export default function MainComponent({ userId }: MainComponentProps) {
           {containers.map((container) => (
             <div
               key={container}
-              className="flex justify-center items-center sm:w-screen lg:w-full overflow-hidden relative">
-              <div className="w-full sm:w-80 md:w-96 p-4 border-2 border-dashed border-gray-300 bg-gray-100 rounded-lg shadow-md transition-colors duration-300 hover:bg-gray-200">
+              className="flex justify-center items-top sm:w-screen lg:w-full overflow-hidden relative">
+              <div className="w-full sm:w-80 md:w-96 p-4 border-2 border-dashed border-gray-300 bg-gray-100 rounded-lg shadow-md transition-colors duration-300 hover:bg-gray-20 ">
                 <div className="flex items-center justify-between mb-4 ">
                   <h2 className="text-xl font-semibold text-gray-800">
                     {container}
@@ -127,7 +143,7 @@ export default function MainComponent({ userId }: MainComponentProps) {
                 </div>
                 <Droppable
                   id={container}
-                  className="flex flex-col gap-2 min-h-[200px] p-2 overflow-hidden">
+                  className="flex flex-col gap-2 min-h-[200px]  p-2 overflow-hidden max-h-full">
                   <SortableContext
                     items={tasks
                       .filter((t) => t.status === container)
@@ -136,17 +152,45 @@ export default function MainComponent({ userId }: MainComponentProps) {
                     {tasks
                       .filter((t) => t.status === container)
                       .map((t) => (
-                        <Draggable
-                          key={t.id}
-                          id={t.id}
-                          className="bg-blue-500 text-black p-4 rounded-lg shadow-lg cursor-pointer hover:bg-blue-600 w-full">
-                          <div className="">
-                            <div className="text-xl font-bold">
-                              {t.title.toUpperCase()}
-                            </div>
-                            <div>{t.description}</div>
+                        <div className="bg-gray-300 p-4 shadow-xl border-black rounded-xl w-full">
+                          <Draggable key={t.id} id={t.id} className="w-full">
+                            <TaskCard
+                              title={t.title}
+                              description={t.description}
+                              dueDate={t.dueDate}
+                              taskId={t.id}
+                              container={container}
+                            />
+                          </Draggable>
+                          <div className="flex mt-2 gap-3">
+                            <Button
+                              className="bg-white "
+                              onClick={(e) => {
+                                console.log("button clicked");
+                                handleDelete(e, t.id);
+                              }}>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke-width="1.5"
+                                stroke="currentColor"
+                                className="size-6 text-red-500 hover:text-red-700 hover:ml-1 hover:mb-1">
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                                />
+                              </svg>
+                            </Button>
+                            <EditTask
+                              taskId={t.id}
+                              container={container}
+                              title={t.title}
+                              description={t.description}
+                            />
                           </div>
-                        </Draggable>
+                        </div>
                       ))}
                   </SortableContext>
                 </Droppable>
@@ -155,11 +199,14 @@ export default function MainComponent({ userId }: MainComponentProps) {
           ))}
           <DragOverlay className="fixed z-9999 transform">
             {activeTask ? (
-              <div className="bg-blue-500 text-black p-4 rounded-lg shadow-lg cursor-pointer hover:bg-blue-600">
-                <div className="text-xl font-bold">
-                  {activeTask.title.toUpperCase()}
-                </div>
-                <div>{activeTask.description}</div>
+              <div>
+                <TaskCard
+                  title={activeTask.title}
+                  description={activeTask.description}
+                  dueDate={activeTask.dueDate}
+                  taskId="1"
+                  container="To do"
+                />
               </div>
             ) : null}
           </DragOverlay>
