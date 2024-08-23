@@ -28,7 +28,6 @@ const Kanban = () => {
       );
 
       setUserId(res.data.id);
-      console.log(process.env.BACKEND_URL);
     } catch (e) {
       console.log("error while fetching user from clerk");
     }
