@@ -148,15 +148,12 @@ export default function MainComponent({ userId }: MainComponentProps) {
       let res;
       if (searchkey.trim() === "") {
         res = await axios.get(
-          `https://kanban-board-nu-olive.vercel.app/tasks`,
-          {
-            params: { userId },
-          }
+          `https://kanban-board-nu-olive.vercel.app/tasks${userId}`
         );
       } else {
-        res = await axios.get(
+        res = await axios.post(
           `https://kanban-board-nu-olive.vercel.app/search/${searchkey}`,
-          { params: { userId } }
+          { userId }
         );
       }
       setTasks(res.data);
