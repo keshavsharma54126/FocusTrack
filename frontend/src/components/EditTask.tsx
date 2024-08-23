@@ -37,13 +37,16 @@ export function EditTask({
         window.alert("title  and description can not be empty");
         return;
       }
-      const res = await axios.put(`${process.env.BACKEND_URL}/editTask`, {
-        title: newtitle,
-        description: newdescription,
-        container,
-        taskId,
-        date,
-      });
+      const res = await axios.put(
+        `https://kanban-board-nu-olive.vercel.app/editTask`,
+        {
+          title: newtitle,
+          description: newdescription,
+          container,
+          taskId,
+          date,
+        }
+      );
       console.log(res.data);
       window.location.reload();
     } catch (e) {
