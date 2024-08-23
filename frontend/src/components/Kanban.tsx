@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useUser } from "@clerk/clerk-react";
 import MainComponent from "./MainComponent";
-import dotenv from "dotenv";
-dotenv.config();
 
 const Kanban = () => {
   const { user, isLoaded } = useUser();
