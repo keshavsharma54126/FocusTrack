@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useUser } from "@clerk/clerk-react";
 import MainComponent from "./MainComponent";
+import dotenv from "dotenv";
+dotenv.config();
 
 const Kanban = () => {
   const { user, isLoaded } = useUser();
@@ -15,15 +17,12 @@ const Kanban = () => {
 
   const synchronizeUser = async () => {
     try {
-      const res = await axios.post(
-        `https://kanban-board-nu-olive.vercel.app/signup`,
-        {
-          email: user?.emailAddresses[0].emailAddress,
-          name: user?.fullName,
-          googleId: user?.externalId,
-          imageUrl: user?.imageUrl,
-        }
-      );
+      const res = await axios.post(`${process.env.BACKEND_URL}/signup`, {
+        email: user?.emailAddresses[0].emailAddress,
+        name: user?.fullName,
+        googleId: user?.externalId,
+        imageUrl: user?.imageUrl,
+      });
 
       setUserId(res.data.id);
     } catch (e) {
