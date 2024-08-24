@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { addDays, endOfDay, startOfDay } from "date-fns";
 
 interface Task {
   id: string;
@@ -14,20 +15,21 @@ const Reminder = ({ tasks }: { tasks: Task[] }) => {
 
   useEffect(() => {
     const now = new Date();
-    const oneDay = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-    const oneWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+    const todayStart = startOfDay(now);
+    const todayEnd = endOfDay(now);
+    const weekEnd = addDays(todayStart, 7);
 
     setTodayTasks(
       tasks.filter((task) => {
         const dueDate = new Date(task.dueDate);
-        return dueDate >= now && dueDate <= oneDay;
+        return dueDate >= todayStart && dueDate <= todayEnd;
       })
     );
 
     setWeekTasks(
       tasks.filter((task) => {
         const dueDate = new Date(task.dueDate);
-        return dueDate > oneDay && dueDate <= oneWeek;
+        return dueDate > todayEnd && dueDate <= weekEnd;
       })
     );
   }, [tasks]);
