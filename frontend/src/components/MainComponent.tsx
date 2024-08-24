@@ -53,7 +53,7 @@ export default function MainComponent({ userId }: MainComponentProps) {
     try {
       console.log("fetching tasks", activeId);
       const res = await axios.get<Task[]>(
-        `${import.meta.env.VITE_BACKEND_URL}/${userId}`
+        `${import.meta.env.VITE_BACKEND_URL}/gettasks/${userId}`
       );
       console.log("tasks fetched");
       setTasks(res.data);
