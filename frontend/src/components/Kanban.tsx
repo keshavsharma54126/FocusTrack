@@ -24,7 +24,7 @@ const Kanban = () => {
           imageUrl: user?.imageUrl,
         }
       );
-
+      console.log();
       setUserId(res.data.id);
     } catch (e) {
       console.log("error while fetching user from clerk");
