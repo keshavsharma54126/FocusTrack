@@ -40,12 +40,12 @@ const Kanban = () => {
   }
 
   return (
-    <div className="mx-auto max-w-7xl py-10">
+    <div className="mx-auto max-w-7xl py-4 ">
       <div className="flex items-center justify-between gap-y-2">
         <h1 className="text-gray-800 text-3xl font-bold">Tasks</h1>
       </div>
-      <div className="mt-10">
-        <div className="grid grid-cols-3 gap-6 overflow-hidden">
+      <div className="mt-8">
+        <div className="grid grid-cols-4 gap-3 overflow-hidden  ">
           <MainComponent userId={userId} />
         </div>
       </div>

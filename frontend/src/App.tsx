@@ -8,7 +8,7 @@ import Kanban from "./components/Kanban";
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col relative ">
+    <div className="min-h-screen bg-gray-900 text-white flex flex-col relative max-w-screen">
       <nav className="bg-gray-800 py-4 px-6 flex justify-between items-center shadow-lg fixed z-30 w-screen">
         <div className="text-white font-bold text-2xl tracking-wide">
           Task Manager
@@ -20,15 +20,18 @@ export default function App() {
             </div>
           </SignedOut>
           <SignedIn>
-            <UserButton
-              userProfileUrl="/profile"
-              appearance={{
-                elements: {
-                  userButtonAvatarBox: "rounded-full border-2 border-white",
-                  userButtonLogoutButton: "hover:bg-gray-700",
-                },
-              }}
-            />
+            <div className="mr-10 ">
+              <UserButton
+                userProfileUrl="/profile"
+                appearance={{
+                  elements: {
+                    userButtonAvatarBox:
+                      "w-12 h-12 rounded-full border-2 border-white ",
+                    userButtonLogoutButton: "hover:bg-gray-700",
+                  },
+                }}
+              />
+            </div>
           </SignedIn>
         </div>
       </nav>
@@ -57,7 +60,7 @@ export default function App() {
       </SignedOut>
       <div id="kanban" className=" flex-1 mb-4">
         <SignedIn>
-          <div className="h-full">
+          <div className="h-full  ">
             <Kanban />
           </div>
         </SignedIn>

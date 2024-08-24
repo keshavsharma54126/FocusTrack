@@ -24,6 +24,7 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 
 import Reminder from "./Reminder";
+import BigRCalendar from "./ui/BigRCalendar";
 
 interface Task {
   id: string;
@@ -166,16 +167,13 @@ export default function MainComponent({ userId }: MainComponentProps) {
   }
 
   return (
-    <div className="flex flex-col justify-center w-full ">
-      <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 ">
-        <div className="">
-          <Reminder tasks={tasks} />
-        </div>
-        <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4 my-8 ">
+    <div className="flex flex-col justify-center w-full mt-6">
+      <div className="mx-auto w-screen max-w-7xl px-4 sm:px-6 lg:px-8 ">
+        <div className="flex flex-col space-y-4 sm:flex-row  sm:items-center sm:space-y-0 sm:space-x-4  mr-6 ">
           <Label htmlFor="search-input" className="sr-only">
             Search Task
           </Label>
-          <div className="relative flex-grow">
+          <div className="relative flex-grow ">
             <Input
               id="search-input"
               type="text"
@@ -232,7 +230,7 @@ export default function MainComponent({ userId }: MainComponentProps) {
                   </div>
                   <Droppable
                     id={container}
-                    className="flex flex-col gap-2 min-h-[200px] p-2 overflow-hidden max-h-full">
+                    className="flex flex-col gap-2 min-h-[200px] p-2 overflow-hidden max-h-full w-full">
                     <SortableContext
                       items={tasks
                         .filter((t) => t.status === container)
@@ -243,7 +241,7 @@ export default function MainComponent({ userId }: MainComponentProps) {
                         .map((t) => (
                           <div
                             key={t.id}
-                            className="bg-gray-300 p-4 shadow-xl border-black rounded-xl w-full">
+                            className="bg-gray-300 p-4 shadow-xl border-black rounded-xl ">
                             <Draggable id={t.id} className="w-full">
                               <TaskCard
                                 title={t.title}
@@ -300,6 +298,14 @@ export default function MainComponent({ userId }: MainComponentProps) {
           ) : null}
         </DragOverlay>
       </DndContext>
+      <div className="flex flex-row gap-4 w-screen mt-6 ">
+        <div className="">
+          <Reminder tasks={tasks} />
+        </div>
+        <div className="bg-white h-[85vh] w-[110vh] text-black border rounded-lg shadow-lg">
+          <BigRCalendar />
+        </div>
+      </div>
     </div>
   );
 }

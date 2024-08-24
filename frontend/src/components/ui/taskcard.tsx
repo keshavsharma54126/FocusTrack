@@ -31,7 +31,7 @@ const TaskCard: React.FC<CardProps> = ({
 
   return (
     <div
-      className={`rounded-lg border shadow-md ${containerClass} p-4 hover:shadow-lg transition-shadow duration-300`}>
+      className={`rounded-lg border shadow-md ${containerClass} p-4 hover:shadow-lg transition-shadow duration-300 `}>
       <div className="flex justify-between items-start mb-4 ">
         <div className="text-xl font-semibold text-gray-800">
           {title.toUpperCase()}
