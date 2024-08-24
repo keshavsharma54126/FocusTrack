@@ -1,5 +1,5 @@
 import React from "react";
-import { format } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 
 interface CardProps {
   title: string;
@@ -27,6 +27,7 @@ const TaskCard: React.FC<CardProps> = ({
     Completed: "bg-green-100 border-green-200",
   };
   const containerClass = containerColors[container];
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   return (
     <div
@@ -37,8 +38,9 @@ const TaskCard: React.FC<CardProps> = ({
         </div>
       </div>
       <p className="text-gray-700 mb-4">{description}</p>
-      <div className="text-gray-600 text-sm">
-        Due Date: {format(new Date(dueDate), "d MMMM, yyyy")}
+      <div className="font-bold text-sm text-red-500 italic">
+        Due Date:{" "}
+        {formatInTimeZone(new Date(dueDate), timeZone, "d MMMM, yyyy")}
       </div>
     </div>
   );
