@@ -16,7 +16,7 @@ const Kanban = () => {
   const synchronizeUser = async () => {
     try {
       const res = await axios.post(
-        `https://kanban-board-nu-olive.vercel.app/signup`,
+        `${import.meta.env.VITE_BACKEND_URL}/signup`,
         {
           email: user?.emailAddresses[0].emailAddress,
           name: user?.fullName,

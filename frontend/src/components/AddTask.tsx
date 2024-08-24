@@ -34,7 +34,7 @@ export function AddTask({
         return;
       }
       const res = await axios.post(
-        `https://kanban-board-nu-olive.vercel.app/addtask`,
+        `${import.meta.env.VITE_BACKEND_URL}/addtask`,
         {
           title,
           description,

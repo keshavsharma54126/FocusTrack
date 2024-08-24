@@ -38,7 +38,7 @@ export function EditTask({
         return;
       }
       const res = await axios.put(
-        `https://kanban-board-nu-olive.vercel.app/editTask`,
+        `${import.meta.env.VITE_BACKEND_URL}/editTask`,
         {
           title: newtitle,
           description: newdescription,

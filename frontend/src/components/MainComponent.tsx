@@ -45,7 +45,6 @@ export default function MainComponent({ userId }: MainComponentProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [searchkey, setSearch] = useState("");
 
-  // Fetch tasks only once when the component mounts
   useEffect(() => {
     getTasks();
   }, [userId]);
@@ -54,7 +53,7 @@ export default function MainComponent({ userId }: MainComponentProps) {
     try {
       console.log("fetching tasks", activeId);
       const res = await axios.get<Task[]>(
-        `https://kanban-board-nu-olive.vercel.app/gettasks/${userId}`
+        `${import.meta.env.VITE_BACKEND_URL}/${userId}`
       );
       console.log("tasks fetched");
       setTasks(res.data);
@@ -95,7 +94,7 @@ export default function MainComponent({ userId }: MainComponentProps) {
   async function changeStatus(container: string | undefined, taskId: any) {
     try {
       const response = await axios.post(
-        "https://kanban-board-nu-olive.vercel.app/changeStatus",
+        `${import.meta.env.VITE_BACKEND_URL}/changeStatus`,
         {
           container,
           taskId,
@@ -136,7 +135,7 @@ export default function MainComponent({ userId }: MainComponentProps) {
     event.stopPropagation();
     try {
       await axios.delete(
-        `https://kanban-board-nu-olive.vercel.app/deletetask/${taskId}`
+        `${import.meta.env.VITE_BACKEND_URL}/deletetask/${taskId}`
       );
       setTasks((tasks) => tasks.filter((task) => task.id !== taskId));
     } catch (e) {
@@ -148,11 +147,11 @@ export default function MainComponent({ userId }: MainComponentProps) {
       let res;
       if (searchkey.trim() === "") {
         res = await axios.get(
-          `https://kanban-board-nu-olive.vercel.app/tasks${userId}`
+          `${import.meta.env.VITE_BACKEND_URL}/tasks${userId}`
         );
       } else {
         res = await axios.post(
-          `https://kanban-board-nu-olive.vercel.app/search/${searchkey}`,
+          `${import.meta.env.VITE_BACKEND_URL}/search/${searchkey}`,
           { userId }
         );
       }
