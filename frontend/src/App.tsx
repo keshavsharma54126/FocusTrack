@@ -11,7 +11,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col relative max-w-screen">
       <nav className="bg-gray-800 py-4 px-6 flex justify-between items-center shadow-lg fixed z-30 w-screen">
-        <div className="text-white font-bold text-2xl tracking-wide">
+        <div className="text-teal-400 to tet font-bold text-2xl tracking-wide ">
           Focus Track
         </div>
         <div>
