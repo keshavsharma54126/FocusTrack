@@ -25,7 +25,7 @@ const TimerDialog = () => {
         </svg>
         Timer
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-h-screen">
         <DialogHeader>
           <DialogTitle>PomoDoro Timer</DialogTitle>
           <DialogDescription>

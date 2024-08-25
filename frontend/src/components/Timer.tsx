@@ -62,7 +62,7 @@ const Timer: React.FC = () => {
   if (seconds < 10) seconds = "0" + seconds;
 
   return (
-    <div className="bg-gray-500 text-black p-4 flex flex-col justify-center items-center gap-6">
+    <div className="bg-gray-500 text-black p-6 flex flex-col justify-center items-center gap-6 h- max-h-screen ">
       <CircularProgressbar
         value={percentage}
         text={`${minutes}:${seconds}`}

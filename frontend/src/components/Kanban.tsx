@@ -33,7 +33,7 @@ const Kanban = () => {
 
   if (!isLoaded) {
     return (
-      <div className="flex justify-center items-center h-screen text-lg font-semibold text-gray-700">
+      <div className="mt-20 flex justify-center items-center h-screen text-lg font-semibold text-gray-700">
         Loading...
       </div>
     );
