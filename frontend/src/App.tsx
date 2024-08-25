@@ -5,6 +5,7 @@ import {
   UserButton,
 } from "@clerk/clerk-react";
 import Kanban from "./components/Kanban";
+import TimerDialog from "./components/TimerDialog";
 
 export default function App() {
   return (
@@ -20,7 +21,8 @@ export default function App() {
             </div>
           </SignedOut>
           <SignedIn>
-            <div className="mr-10 ">
+            <div className="mr-10 flex flex-row gap-10">
+              <TimerDialog />
               <UserButton
                 userProfileUrl="/profile"
                 appearance={{
